@@ -1,0 +1,134 @@
+swagger: '2.0'
+info:
+  title: Desafio 15 Backend API
+  version: 1.0.0
+  description: Documentacion de la API de Desafio 15 Backend
+host: localhost:3000
+paths:
+  api/carts:
+    get:
+      tags:
+        - Carts
+      summary: Retorna todos los carritos
+      description: Retorna todos los carritos creados en el sistema
+      responses:
+        200:
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Cart'
+      security:
+        - jwt: []
+
+    post:
+      tags:
+        - Carts
+      summary: Crea un nuevo carrito
+      description: Crea un nuevo carrito con los productos indicados
+      parameters:
+        - in: body
+          name: products
+          description: Productos a agregar al carrito
+          required: true
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Product'
+      responses:
+        201:
+          description: Created
+          schema:
+            $ref: '#/definitions/Cart'
+      security:
+        - jwt: []
+
+  api/carts/{id}:
+    get:
+      tags:
+        - Carts
+      summary: Retorna un carrito específico
+      description: Retorna un carrito específico, identificado por su ID
+      parameters:
+        - in: path
+          name: id
+          description: ID del carrito a buscar
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/Cart'
+      security:
+        - jwt: []
+
+    put:
+      tags:
+        - Carts
+      summary: Actualiza un carrito
+      description: Actualiza un carrito existente con los nuevos productos indicados
+      parameters:
+        - in: path
+          name: id
+          description: ID del carrito a actualizar
+          required: true
+          type: string
+        - in: body
+          name: products
+          description: Productos a agregar al carrito
+          required: true
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Product'
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/Cart'
+      security:
+        - jwt: []
+
+    delete:
+      tags:
+        - Carts
+      summary: Elimina un carrito
+      description: Elimina un carrito existente, identificado por su ID
+      parameters:
+        - in: path
+          name: id
+          description: ID del carrito a eliminar
+          required: true
+          type: string
+      responses:
+        204:
+          description: No Content
+      security:
+        - jwt: []
+
+securityDefinitions:
+  jwt:
+    type: apiKey
+    name: Authorization
+    in: header
+
+definitions:
+    Product:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Product 1"
+        description:
+          type: string
+          example: "Product description"
+        price:
+          type: number
+          example: 19.99
+        image:
+          type: string
+          example: "https://example.com/product.jpg"
+      required:
+        - name
+        - price
